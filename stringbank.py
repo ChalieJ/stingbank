@@ -1,5 +1,6 @@
 # coding: utf-8
- 
+
+import os
 import sys
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
@@ -123,21 +124,23 @@ class Form(QtWidgets.QDialog):
         fd.close()
 
     def data_load(self):
-        fd = open("data.dat", "r")
 
-        line = fd.readline()
+        if os.path.exists("data.dat"):
+            fd = open("data.dat", "r")
 
-        while line:
-            splittext = line.split('|')
-            print(splittext[0])
-            print(splittext[1])
-            self.cbList.addItem(splittext[0])
-            data[splittext[0]] = splittext[1]
-            self.labString.setText(splittext[1])
             line = fd.readline()
 
-        fd.close()
-        self.refresh_item()	
+            while line:
+                splittext = line.split('|')
+                print(splittext[0])
+                print(splittext[1])
+                self.cbList.addItem(splittext[0])
+                data[splittext[0]] = splittext[1]
+                self.labString.setText(splittext[1])
+                line = fd.readline()
+
+            fd.close()
+            self.refresh_item()	
 
     def refresh_item(self):
         self.labString.setText(data[self.cbList.currentText()])
