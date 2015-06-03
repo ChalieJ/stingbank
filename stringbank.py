@@ -92,22 +92,27 @@ class Form(QtWidgets.QDialog):
         self.cbList.addItem(self.le.text())
         data[self.le.text()] = self.te.toPlainText()
 	    # refresh item
-        self.refresh_item()	
+        self.refresh_item()
 
 		# save file
         self.data_save()	
 
+        self.te.clear()
+        self.le.clear()
+
     # delete button event
     @pyqtSlot()
     def slot_delete_clipboard(self):
-        # delete structure
-        del data[self.cbList.currentText()]
-        # delete combobox item - current item
-        self.cbList.removeItem(self.cbList.findText(self.cbList.currentText()))
-        # refresh item
-        self.refresh_item()	
+        # TODO : check data nount
+        if len(data):
+            # delete structure
+            del data[self.cbList.currentText()]
+            # delete combobox item - current item
+            self.cbList.removeItem(self.cbList.findText(self.cbList.currentText()))
+            # refresh item
+            self.refresh_item()
 	
-	    # save file
+        # save file
         self.data_save()	
 
     # combobox event
@@ -129,11 +134,10 @@ class Form(QtWidgets.QDialog):
             fd = open("data.dat", "r")
 
             line = fd.readline()
+            line = line[:-1]
 
             while line:
                 splittext = line.split('|')
-                print(splittext[0])
-                print(splittext[1])
                 self.cbList.addItem(splittext[0])
                 data[splittext[0]] = splittext[1]
                 self.labString.setText(splittext[1])
@@ -143,7 +147,10 @@ class Form(QtWidgets.QDialog):
             self.refresh_item()	
 
     def refresh_item(self):
-        self.labString.setText(data[self.cbList.currentText()])
+        if len(data):
+            self.labString.setText(data[self.cbList.currentText()])
+        else:
+            self.labString.clear()
 
 
 if __name__ == '__main__':
