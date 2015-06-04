@@ -1,6 +1,7 @@
 # stingbank
 
 language : python
+settings : python3.4 + PyQt5
 
 Use to store frequently-used strings
 
