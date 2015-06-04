@@ -5,7 +5,7 @@ import sys
 import base64
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSlot # pyqtSlot ?Á·???Æ¼?? ?????Ï±? À§??
+from PyQt5.QtCore import pyqtSlot    # for connect pyqt slot
 
 data = {}
 
@@ -129,9 +129,9 @@ class Form(QtWidgets.QDialog):
             fd.write(key + '|' + value + '\n')
 
         fd.close()
+        self.sort_refresh_item()
 
     def data_load(self):
-
         if os.path.exists("data.dat"):
             fd = open("data.dat", "r")
 
@@ -147,12 +147,13 @@ class Form(QtWidgets.QDialog):
                 if len(line) > 0:
                     if line[-1] == "\n":
                         line = line[:-1]
-                    print(len(line))
                     splittext = line.split('|')
-                    self.cbList.addItem(splittext[0])
                     data[splittext[0]] = splittext[1]
+                    self.cbList.addItem(splittext[0])
                     self.labString.setText(splittext[1])
                     line = fd.readline()
+
+            self.sort_refresh_item()
 
             fd.close()
             self.refresh_item()	
@@ -163,6 +164,13 @@ class Form(QtWidgets.QDialog):
         else:
             self.labString.clear()
 
+    def sort_refresh_item(self):
+        sortKey = sorted(data)
+
+        self.cbList.clear()
+
+        for key in sortKey:
+            self.cbList.addItem(key)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
