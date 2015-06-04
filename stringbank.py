@@ -2,6 +2,7 @@
 
 import os
 import sys
+import base64
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtSlot # pyqtSlot 프로퍼티를 사용하기 위함
@@ -91,10 +92,10 @@ class Form(QtWidgets.QDialog):
         # add item(combobox) & data structure
         self.cbList.addItem(self.le.text())
         data[self.le.text()] = self.te.toPlainText()
-	    # refresh item
+        # refresh item
         self.refresh_item()
 
-		# save file
+        # save file
         self.data_save()	
 
         self.te.clear()
@@ -103,7 +104,6 @@ class Form(QtWidgets.QDialog):
     # delete button event
     @pyqtSlot()
     def slot_delete_clipboard(self):
-        # TODO : check data nount
         if len(data):
             # delete structure
             del data[self.cbList.currentText()]
@@ -134,14 +134,19 @@ class Form(QtWidgets.QDialog):
             fd = open("data.dat", "r")
 
             line = fd.readline()
-            line = line[:-1]
+            if line[-1] == "\n":
+                line = line[:-1]
 
             while line:
-                splittext = line.split('|')
-                self.cbList.addItem(splittext[0])
-                data[splittext[0]] = splittext[1]
-                self.labString.setText(splittext[1])
-                line = fd.readline()
+                if len(line) > 0:
+                    if line[-1] == "\n":
+                        line = line[:-1]
+                    print(len(line))
+                    splittext = line.split('|')
+                    self.cbList.addItem(splittext[0])
+                    data[splittext[0]] = splittext[1]
+                    self.labString.setText(splittext[1])
+                    line = fd.readline()
 
             fd.close()
             self.refresh_item()	
