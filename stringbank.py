@@ -5,7 +5,7 @@ import sys
 import base64
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSlot # pyqtSlot 프로퍼티를 사용하기 위함
+from PyQt5.QtCore import pyqtSlot # pyqtSlot ?족???티?? ?????歐? 위??
 
 data = {}
 
@@ -107,8 +107,10 @@ class Form(QtWidgets.QDialog):
         if len(data):
             # delete structure
             del data[self.cbList.currentText()]
+
             # delete combobox item - current item
             self.cbList.removeItem(self.cbList.findText(self.cbList.currentText()))
+
             # refresh item
             self.refresh_item()
 	
@@ -134,6 +136,10 @@ class Form(QtWidgets.QDialog):
             fd = open("data.dat", "r")
 
             line = fd.readline()
+
+            if len(line) == 0:
+                return
+
             if line[-1] == "\n":
                 line = line[:-1]
 
